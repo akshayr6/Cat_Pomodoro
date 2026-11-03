@@ -45,13 +45,13 @@ Details of record are in `AGENTS.md`, section DESIGN.
 
 ## How the captain gets it on his phone (Android)
 
-- When a checkpoint's note says an APK was built: it is at `/Volumes/GameStudy/_handoffs/cat_pomodoro/CatPomodoro_C0xx.apk` on the Mac (the repo's `Builds/` folder is not committed). Install with the phone on USB and USB debugging on: `adb install -r CatPomodoro_C0xx.apk`, or copy the APK to the phone and open it (allow "install unknown apps" once).
-- Until the Android module is installed in the Mac editor (the console's job), the Builder builds for the editor only and the note says so.
+- Everything happens on the Windows machine (`D:\GameStudy\cat_pomodoro`, Unity 6000.0.62f1 with the Android Build Support module installed on 3 Nov 2026; adb at `C:\Program Files\Unity\Hub\Editor\6000.0.62f1\Editor\Data\PlaybackEngines\AndroidPlayer\SDK\platform-tools\adb.exe`). Phone on USB with USB debugging on, then **File > Build Profiles > Android > Build And Run**: the app installs and opens on the phone. `README_WINDOWS.md` (also at `D:\GameStudy\journey\README_WINDOWS.md`) has the phone setup step by step.
+- The Builder's machine has no Android module: when a brief asks for an APK, the Builder's note says what was built in the editor and the captain makes the phone build himself with Build And Run after `git pull`.
 - iPhone comes later (needs a Mac build with the iOS module and a signing identity; not part of the current roadmap).
 
 ## How the loop works
 
-1. On a build checkpoint of the Journey page you edit the starter brief and press **Send**. The page stores it in its shared database (collection `checkpoints`, doc `C0xx`, `brief_status = sent`).
+1. On a build checkpoint of the Journey page (open in Chrome on the Windows machine) you edit the starter brief and press **Send**. The page stores it in its shared database (collection `checkpoints`, doc `C0xx`, `brief_status = sent`).
 2. The Builder lane (a Claude session on the Mac, pane name BUILDER) polls that database every 60 s. When it sees `sent`, it marks the checkpoint `building` with a "started hh:mm" note and the page's top line shows what it is doing.
 3. It writes the code and scene changes here, copies the Cats R assets the brief needs, compiles with a headless Unity (no window), commits and pushes `C0xx: <what>`.
 4. It marks the checkpoint `built` and writes a three-line note: what was added, where to look when you press Play or on the phone, why this way (the pattern's name). You read the note on the page, pull, press Play, and tick the checkpoint yourself - the Builder never ticks it.
